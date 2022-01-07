@@ -48,7 +48,10 @@ export const DonationForm: React.FC = (props) => {
           values={["1", "2", "4", "8", "16", "32"]}
           onChanged={onDonationChanged} />
       </div>
-      <div>Your donation: $ {current.context.donationAmount}</div>
+      {
+        donationAmount &&
+        <div>Your donation: $ {donationAmount}</div>
+      }
       {/*<input*/}
       {/*  autoFocus*/}
       {/*  placeholder="enter donation amount"*/}
