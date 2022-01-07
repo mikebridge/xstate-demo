@@ -2,6 +2,7 @@ import React, { FormEventHandler, useContext } from 'react';
 import { useActor, useMachine } from '@xstate/react';
 import { DonationWorkflowContext } from './donationWorkflowProvider';
 import { donationWorkflowMachine } from './donationWorkflowMachine';
+import { ContributionSelectorComponent } from './contributionSelector';
 
 // export interface DonationFormProps: {}
 // SEE: https://xstate.js.org/docs/recipes/react.html
@@ -29,29 +30,41 @@ export const DonationForm: React.FC = (props) => {
     send("SET_DONATION_AMOUNT", { donationAmount: newDonationAmount })
   }
 
-  return (<>
+  const onDonationChanged = (val: string) => {
+    console.log(`setting contribution to ${val}`)
+    send("SET_DONATION_AMOUNT", { donationAmount: val })
+    //send("SET_DONATION_AMOUNT", { donationAmount: val })
+  }
+
+  return (
     <form onSubmit={onSubmit}>
       <h3>Donation Form</h3>
       <div>
-        {current.matches('editing') ? 'Please fill out the form' : 'Thanks!'}
+        {current.matches('editing') ? 'Please select a donation amount' : 'Thanks for your donation!'}
       </div>
       {invalid ? <div className="error">Sorry, that's invalid.</div> : null}
-      <input
-        autoFocus
-        placeholder="enter donation amount"
-        value={donationAmount || ""}
-        style={{
-          borderColor: invalid ? "red" : undefined
-        }}
-        onChange={onDonationAmountChanged}
-        disabled={!editing}
-        data-testid="input"
-      />
+      <div>
+        <ContributionSelectorComponent
+          values={["1", "2", "4", "8", "16", "32"]}
+          onChanged={onDonationChanged} />
+      </div>
+      <div>Your donation: $ {current.context.donationAmount}</div>
+      {/*<input*/}
+      {/*  autoFocus*/}
+      {/*  placeholder="enter donation amount"*/}
+      {/*  value={donationAmount || ""}*/}
+      {/*  style={{*/}
+      {/*    borderColor: invalid ? "red" : undefined*/}
+      {/*  }}*/}
+      {/*  onChange={onDonationAmountChanged}*/}
+      {/*  disabled={!editing}*/}
+      {/*  data-testid="input"*/}
+      {/*/>*/}
       <button disabled={!editing || invalid} data-testid="save-button">
         Save
       </button>
     </form>
-  </>);
+  );
 }
 
 // import { useMachine } from '@xstate/react';
