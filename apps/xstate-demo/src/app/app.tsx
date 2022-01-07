@@ -1,12 +1,10 @@
-import styles from './app.module.css';
-import NxWelcome from './nx-welcome';
+// import styles from './app.module.css';
+
+import { DonationForm } from './main/donationForm';
 
 export function App() {
   return (
-    <>
-      <NxWelcome title="xstate-demo" />
-      <div />
-    </>
+      <DonationForm />
   );
 }
 
