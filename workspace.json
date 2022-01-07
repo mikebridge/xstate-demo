@@ -1,0 +1,7 @@
+{
+  "version": 2,
+  "projects": {
+    "xstate-demo": "apps/xstate-demo",
+    "xstate-demo-e2e": "apps/xstate-demo-e2e"
+  }
+}

@@ -1,0 +1,73 @@
+{
+  "root": "apps/xstate-demo",
+  "sourceRoot": "apps/xstate-demo/src",
+  "projectType": "application",
+  "targets": {
+    "build": {
+      "executor": "@nrwl/web:webpack",
+      "outputs": ["{options.outputPath}"],
+      "defaultConfiguration": "production",
+      "options": {
+        "compiler": "babel",
+        "outputPath": "dist/apps/xstate-demo",
+        "index": "apps/xstate-demo/src/index.html",
+        "baseHref": "/",
+        "main": "apps/xstate-demo/src/main.tsx",
+        "polyfills": "apps/xstate-demo/src/polyfills.ts",
+        "tsConfig": "apps/xstate-demo/tsconfig.app.json",
+        "assets": [
+          "apps/xstate-demo/src/favicon.ico",
+          "apps/xstate-demo/src/assets"
+        ],
+        "styles": ["apps/xstate-demo/src/styles.css"],
+        "scripts": [],
+        "webpackConfig": "@nrwl/react/plugins/webpack"
+      },
+      "configurations": {
+        "production": {
+          "fileReplacements": [
+            {
+              "replace": "apps/xstate-demo/src/environments/environment.ts",
+              "with": "apps/xstate-demo/src/environments/environment.prod.ts"
+            }
+          ],
+          "optimization": true,
+          "outputHashing": "all",
+          "sourceMap": false,
+          "namedChunks": false,
+          "extractLicenses": true,
+          "vendorChunk": false
+        }
+      }
+    },
+    "serve": {
+      "executor": "@nrwl/web:dev-server",
+      "options": {
+        "buildTarget": "xstate-demo:build",
+        "hmr": true
+      },
+      "configurations": {
+        "production": {
+          "buildTarget": "xstate-demo:build:production",
+          "hmr": false
+        }
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["apps/xstate-demo/**/*.{ts,tsx,js,jsx}"]
+      }
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["coverage/apps/xstate-demo"],
+      "options": {
+        "jestConfig": "apps/xstate-demo/jest.config.js",
+        "passWithNoTests": true
+      }
+    }
+  },
+  "tags": []
+}
