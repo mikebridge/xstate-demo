@@ -1,5 +1,6 @@
+export const toNumber = (value: string) => Number(value)
 
-export const isStringifiedNumber = (value: string | null) =>  (value && !Number.isNaN(Number(value)))
+export const isStringifiedNumber = (value: string | null) =>  (value && !Number.isNaN(toNumber(value)))
 
 export function validate(value: string | null) {
   return new Promise((resolve, reject) => {

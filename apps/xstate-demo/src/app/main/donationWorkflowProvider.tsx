@@ -3,10 +3,10 @@
 
 import React, { createContext } from 'react';
 import { useInterpret } from '@xstate/react';
-import { donationWorkflowMachine } from './donationWorkflowMachine';
+import { createDonationWorkflowMachine } from './donationWorkflowMachine';
 import { InterpreterFrom } from 'xstate';
 
-
+const donationWorkflowMachine = createDonationWorkflowMachine();
 
 // interface IDonationWorkflowContext {
 //   donationWorkflowService: () => void;

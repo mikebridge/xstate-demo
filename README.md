@@ -1,9 +1,12 @@
 # State Management + Data Model
 
 Exploration of state management, data modelling + React 
-using [xstate](https://xstate.js.org/
+using [xstate](https://xstate.js.org/)
 
 See: [https://codesandbox.io/s/crckp](https://codesandbox.io/s/crckp)
+
+[Comparison with Redux](https://stackoverflow.com/questions/54482695/what-is-an-actual-difference-between-redux-and-a-state-machine-e-g-xstate/54521035#54521035
+)
 
 ## Setup
 

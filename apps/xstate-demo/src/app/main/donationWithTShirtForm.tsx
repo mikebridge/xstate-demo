@@ -1,20 +1,31 @@
 import React, { FormEventHandler, useContext } from 'react';
 import { useActor, useMachine } from '@xstate/react';
-import { DonationWorkflowContext } from './donationWorkflowProvider';
-import { createDonationWorkflowMachine } from './donationWorkflowMachine';
 import { ContributionSelectorComponent } from './contributionSelector';
+import {
+  createDonationWorkflowMachine,
+  DonationWorkflowSetDonationAmountEvent,
+  IDonationWorkflowContext
+} from './donationWorkflowMachine';
+import { createDonationWithBonusWorkflow } from './donationWithBonusWorkflowMachine';
 
-// export interface DonationFormProps: {}
-// SEE: https://xstate.js.org/docs/recipes/react.html
+export const DonationWithTShirtForm: React.FC = (props) => {
+  const donationThreshold = 5;
 
-export const DonationForm: React.FC = (props) => {
-  const [current, send] = useMachine(createDonationWorkflowMachine());
+  const bonusWorkflowMachine = createDonationWithBonusWorkflow(donationThreshold)
+
+  const [currentBonus, bonusSend] = useMachine(bonusWorkflowMachine);
+
+  // send the result of the donation machine to the donation bonus machine
+  const onDonationAmountChangedCallback = (ctx: IDonationWorkflowContext, e: DonationWorkflowSetDonationAmountEvent) => {
+    console.log(`telling bonus machine about the donation machine change: ${e.donationAmount}`)
+    bonusSend("DONATION_AMOUNT_CHANGED", { donationAmount: e.donationAmount })
+  }
+  const [current, send] = useMachine(createDonationWorkflowMachine(onDonationAmountChangedCallback, ));
+
   const { donationAmount } = current.context;
 
   const editing = current.matches("editing");
   const invalid = current.matches({ editing: "invalid" });
-  //const donationWorkflowContext = useContext(DonationWorkflowContext);
-  //const [state] = useActor(donationWorkflowContext.donationWorkflowService);
 
   const onSubmit: FormEventHandler<HTMLFormElement> = (e) => {
     e.preventDefault();
@@ -36,7 +47,7 @@ export const DonationForm: React.FC = (props) => {
 
   return (
     <form onSubmit={onSubmit}>
-      <h3>Donation Form</h3>
+      <h3>Donation Form with Bonus TShirt</h3>
       <div>
         {current.done ? 'Thanks for your donation!': 'Please select a donation amount'}
       </div>
@@ -50,40 +61,13 @@ export const DonationForm: React.FC = (props) => {
         donationAmount &&
         <div>Your donation: $ {donationAmount}</div>
       }
-      {/*<input*/}
-      {/*  autoFocus*/}
-      {/*  placeholder="enter donation amount"*/}
-      {/*  value={donationAmount || ""}*/}
-      {/*  style={{*/}
-      {/*    borderColor: invalid ? "red" : undefined*/}
-      {/*  }}*/}
-      {/*  onChange={onDonationAmountChanged}*/}
-      {/*  disabled={!editing}*/}
-      {/*  data-testid="input"*/}
-      {/*/>*/}
+      {currentBonus.matches('available') &&
+        <div>You will receive a free T-Shirt for contributing more than ${donationThreshold}</div>
+      }
       <button disabled={!editing || invalid} data-testid="save-button">
-        Save
+        Donate
       </button>
     </form>
   );
 }
 
-// import { useMachine } from '@xstate/react';
-// import { createContext } from 'react';
-// //import { toggleMachine } from '../path/to/toggleMachine';
-//
-// export const GlobalStateContext = createContext({});
-//
-// const formMachine = {
-//
-// }
-//
-// function Toggle() {
-//   const [current, send] = useMachine(formMachine);
-//
-//   return (
-//     <button onClick={() => send('TOGGLE')}>
-//       {current.matches('inactive') ? 'Off' : 'On'}
-//     </button>
-//   );
-// }
