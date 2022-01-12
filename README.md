@@ -12,6 +12,7 @@ this project requires nx
 ```
 nvm use
 npm install -g nx
+npm install
 ```
 
 ## Usage
